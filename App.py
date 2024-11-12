@@ -17,15 +17,15 @@ def fetch_notices(url, site_name):
     # Define cross-platform path for seen notices
     home_dir = os.path.expanduser('~')
     if platform.system() == "Windows":
-        local_dir = os.path.join(home_dir, 'AppData', 'Local', 'uiu_notification')
+        local_dir = os.path.join(home_dir, 'AppData', 'Local', 'NotifyDude')
     elif platform.system() == "Darwin":  # macOS
-        local_dir = os.path.join(home_dir, 'Library', 'Application Support', 'uiu_notification')
+        local_dir = os.path.join(home_dir, 'Library', 'Application Support', 'NotifyDude')
     else:
-        local_dir = os.path.join(home_dir, '.local', 'uiu_notification')
+        local_dir = os.path.join(home_dir, '.local', 'NotifyDude')
 
     os.makedirs(local_dir, exist_ok=True)
     seen_notices_path = os.path.join(local_dir, 'seen_notices.txt')
-    logo_path = os.path.join(local_dir, 'logo.png')  # Ensure this exists or skip `app_icon`
+    logo_path = os.path.join(local_dir, 'logo_gray.png')  # Ensure this exists or skip `app_icon`
 
     # Load previously seen notices from seen_notices.txt
     try:
@@ -54,8 +54,8 @@ def fetch_notices(url, site_name):
         notification.notify(
             title=site_name,
             message=notice,
-            app_name=f'{site_name} Notification',
-            app_icon=logo_path if os.path.exists(logo_path) else None,
+            app_name='NotifyDude',
+            app_icon=logo_path,
             timeout=10
         )
 
