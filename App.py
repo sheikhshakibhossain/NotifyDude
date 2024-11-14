@@ -25,6 +25,7 @@ def fetch_notices(url, site_name):
 
     os.makedirs(local_dir, exist_ok=True)
     seen_notices_path = os.path.join(local_dir, 'seen_notices.txt')
+    log_path = os.path.join(local_dir, 'log.txt')
     logo_path = os.path.join(local_dir, 'logo_gray.png')  # Ensure this exists or skip `app_icon`
 
     # Load previously seen notices from seen_notices.txt
@@ -63,6 +64,11 @@ def fetch_notices(url, site_name):
     with open(seen_notices_path, 'w') as f:
         for notice in seen_notices:
             f.write(notice + '\n')
+
+    with open(log_path, 'a') as f:
+        f.write(f'Checked {site_name} on {datetime.now()}\n')
+    
+    print(f'{datetime.now()} - fetching {site_name} done')
 
 
 def __main__():
