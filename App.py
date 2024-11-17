@@ -11,6 +11,8 @@ import platform
 
 
 def fetch_notices(url, site_name):
+
+    # print(f'{datetime.now()} - fetching {site_name} started')
     response = requests.get(url)
     soup = BeautifulSoup(response.content, 'html.parser')
 
@@ -46,7 +48,7 @@ def fetch_notices(url, site_name):
         notice = f'{date}: {title}'
 
         # Check if notice is new
-        if date == today or notice not in seen_notices:
+        if notice not in seen_notices:
             new_notices.append(notice)
             seen_notices.add(notice)  # Mark as seen
 
