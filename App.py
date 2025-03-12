@@ -56,7 +56,7 @@ def fetch_notices(url, site_name):
         link = a_tag['href']
 
         # notice = f'{date}: {title}'
-        notice = f"{date}: {title}\t\t\t\t\t\t\t\t\t\t\nLink: {link}"
+        notice = f"{date}: {title} Link: {link}".strip()
 
         # Check if notice is new
         # today = str(today).strip()
