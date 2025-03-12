@@ -46,7 +46,14 @@ def fetch_notices(url, site_name):
     for d in data:
         title = d.find('div', class_='title').text.strip()
         date = d.find('span', class_='date').text.strip()
-        notice = f'{date}: {title}'
+
+        # Find the <a> tag within the <div> with class 'title'
+        a_tag = d.find('div', class_='title').find('a')
+        # Extract the href attribute
+        link = a_tag['href']
+
+        # notice = f'{date}: {title}'
+        notice = f"{date}: {title}\t\t\t\t\t\t\t\t\t\t\nLink: {link}"
 
         # Check if notice is new
         today = str(today).strip()
