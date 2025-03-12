@@ -2,7 +2,7 @@
 
 import requests
 from bs4 import BeautifulSoup
-from datetime import datetime
+from datetime import datetime, timedelta
 import os
 import threading
 import time
@@ -40,6 +40,9 @@ def fetch_notices(url, site_name):
 
     # Get today's date for filtering notices
     today = datetime.today().strftime('%B %d, %Y')
+    today_dt = datetime.strptime(today, '%B %d, %Y')
+
+    ten_days_ago_dt = today_dt - timedelta(days=30)
     
     data = soup.find_all('div', class_='notice')
     new_notices = []
@@ -56,10 +59,13 @@ def fetch_notices(url, site_name):
         notice = f"{date}: {title}\t\t\t\t\t\t\t\t\t\t\nLink: {link}"
 
         # Check if notice is new
-        today = str(today).strip()
+        # today = str(today).strip()
         #today = 'February 1, 2025'
         date = str(date).strip()
-        if notice not in seen_notices and date == today:
+        notice_date = datetime.strptime(date, '%B %d, %Y')
+
+        # if notice not in seen_notices and date == today:
+        if notice not in seen_notices and ten_days_ago_dt <= notice_date <= today_dt:
             new_notices.append(notice)
             seen_notices.add(notice)  # Mark as seen
 
