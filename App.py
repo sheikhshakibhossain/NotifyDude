@@ -40,6 +40,7 @@ def fetch_notices(url, site_name):
 
     # Get today's date for filtering notices
     today = datetime.today().strftime('%B %d, %Y')
+    
     data = soup.find_all('div', class_='notice')
     new_notices = []
     for d in data:
@@ -48,7 +49,10 @@ def fetch_notices(url, site_name):
         notice = f'{date}: {title}'
 
         # Check if notice is new
-        if notice not in seen_notices:
+        today = str(today).strip()
+        #today = 'February 1, 2025'
+        date = str(date).strip()
+        if notice not in seen_notices and date == today:
             new_notices.append(notice)
             seen_notices.add(notice)  # Mark as seen
 
