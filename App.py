@@ -29,6 +29,15 @@ def setup_logging():
         format='%(asctime)s - %(levelname)s - %(message)s'
     )
 
+
+def check_internet_connection():
+    try:
+        requests.get('https://8.8.8.8', timeout=5)
+        return True
+    except requests.ConnectionError:
+        return False
+
+
 def fetch_notices(url, site_name):
     try:
         response = requests.get(url)
@@ -108,6 +117,7 @@ def fetch_notices(url, site_name):
         logging.error(f"Request failed for {site_name}: {e}")
     except Exception as e:
         logging.error(f"An error occurred while fetching notices from {site_name}: {e}")
+        
 
 def __main__():
     setup_logging()
@@ -117,16 +127,20 @@ def __main__():
     # Run the fetch loop periodically
     while True:
         try:
-            thread_uiu = threading.Thread(target=fetch_notices, args=(uiu_url, 'UIU'))
-            thread_cse = threading.Thread(target=fetch_notices, args=(cse_url, 'CSE'))
+            if check_internet_connection():
+                thread_uiu = threading.Thread(target=fetch_notices, args=(uiu_url, 'UIU'))
+                thread_cse = threading.Thread(target=fetch_notices, args=(cse_url, 'CSE'))
 
-            # Start threads
-            thread_uiu.start()
-            thread_cse.start()
+                # Start threads
+                thread_uiu.start()
+                thread_cse.start()
 
-            # Wait for threads to finish
-            thread_uiu.join()
-            thread_cse.join()
+                # Wait for threads to finish
+                thread_uiu.join()
+                thread_cse.join()
+            else:
+                print(f"{datetime.now()} - No internet connection. Retrying in 10 minutes...")
+                logging.warning("No internet connection. Retrying in 10 minutes...")
 
             time.sleep(600)  # Wait 10 minutes before checking again
 
