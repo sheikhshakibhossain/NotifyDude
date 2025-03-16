@@ -126,6 +126,11 @@ def __main__():
 
     # Run the fetch loop periodically
     while True:
+
+        while not check_internet_connection():
+            print("No internet connection. Retrying ...")
+            time.sleep(1)
+
         try:
             if check_internet_connection():
                 thread_uiu = threading.Thread(target=fetch_notices, args=(uiu_url, 'UIU'))
